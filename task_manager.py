@@ -15,21 +15,37 @@ def save_tasks(tasks):
 
 def add_task(new_task):
     tasks = load_tasks()
-    tasks.append(new_task)
+    new_task_obj = {"id": len(tasks) + 1, "task": new_task, "status": "pending"}
+    tasks.append(new_task_obj)
     save_tasks(tasks)
     print("Hurray!!! Task Added")
 
 def list_tasks():
     tasks = load_tasks()
-    for i, t in enumerate(tasks):
-        print(f"{i}:  {t}")
+    for i in tasks:
+        print(f"{i['id']}:  {i['task']}:  {i['status']}")
 
-def delete_task(index):
-    tasks = load_tasks()
+def mark_done(task_id):
     try:
-        tasks.pop(int(index))
+        tasks = load_tasks()
+        for t in tasks:
+            if t["id"] == int(task_id):
+                t["status"] = "done"
+                break
         save_tasks(tasks)
-        print("yayyy!! Task deleted i.e., Task completed ;)")
+        print("Yayyy!! You completed the task")
+    except:
+        print("enter a valid index")
+
+def delete_task(task_id):
+    tasks = load_tasks()
+    tasks_new = []
+    try:
+        for t in tasks:
+            if t["id"] != int(task_id):
+                tasks_new.append(t)
+        save_tasks(tasks_new)
+        print("Task deleted;)")
     except:
         print("Please enter a valid index")
 
